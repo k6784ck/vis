@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>NBA Visualization</title>
+    <script src="http://d3js.org/d3.v5.min.js" charset="utf-8"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://bl.ocks.org/syntagmatic/raw/3341641/render-queue.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" type="text/css" href="button.css"> <!-- 控制按鈕的css -->
+</head>
+
+<body>
+    <!--功能列-->
+    <div style="width:100%; height: 100px; overflow: hidden; background-color: beige;">
+
+        <div id="nba-logo" style="float: left">
+            <img src="NBA Logo.jfif" style="width: 300px; height: 100px">
+        </div>
+        <div class="button_div" style="float: right">
+
+            <form action="assist_team.html" style="float: right">
+                <button class="button">球員助攻關係</button>
+            </form>
+            <form action="index.html" style="float: right">
+                <button class="button">聯盟雙人組排行</button>
+            </form>
+
+            <form action="player_assist.html" style="float: right">
+                <button class="button">球員助攻分布圖</button>
+            </form>
+
+            <form action="index_team_shot.html" style="float: right">
+                <button class="button">球隊投籃分布圖</button>
+            </form>
+
+        </div>
+
+    </div>
+    <!--功能列-->
+    <div style="width: 100vw; height: 30px;"></div>
+    <div style="text-align: center;position: relative">
+        <div id="select-team">
+            <label for="team">Choose team: </label>
+            <select name="team" id="team" style="size: 30; overflow-y: auto; text-align: center;"
+                onchange="selectTeam()">
+                <option value=JohnCollins>John Collins</option>
+                <option value=DewayneDedmon>Dewayne Dedmon</option>
+                <option value=VinceCarter>Vince Carter</option>
+                <option value=DeyontaDavis>Deyonta Davis</option>
+                <option value=DeAndre'Bembry>DeAndre' Bembry</option>
+                <option value=JustinAnderson>Justin Anderson</option>
+                <option value=KevinHuerter>Kevin Huerter</option>
+                <option value=JaylenAdams>Jaylen Adams</option>
+                <option value=AlexLen>Alex Len</option>
+                <option value=KentBazemore>Kent Bazemore</option>
+                <option value=TraeYoung>Trae Young</option>
+                <option value=JeremyLin>Jeremy Lin</option>
+                <option value=OmariSpellman>Omari Spellman</option>
+                <option value=AlexPoythress>Alex Poythress</option>
+                <option value=TylerDorsey>Tyler Dorsey</option>
+                <option value=DanielHamilton>Daniel Hamilton</option>
+                <option value=B.J.Johnson>B.J. Johnson</option>
+                <option value=AlHorford>Al Horford</option>
+                <option value=JaysonTatum>Jayson Tatum</option>
+                <option value=MarcusSmart>Marcus Smart</option>
+                <option value=TerryRozier>Terry Rozier</option>
+                <option value=JaylenBrown>Jaylen Brown</option>
+                <option value=MarcusMorris>Marcus Morris</option>
+                <option value=AronBaynes>Aron Baynes</option>
+                <option value=GordonHayward>Gordon Hayward</option>
+                <option value=BradWanamaker>Brad Wanamaker</option>
+                <option value=KyrieIrving>Kyrie Irving</option>
+                <option value=DanielTheis>Daniel Theis</option>
+                <option value=SemiOjeleye>Semi Ojeleye</option>
+                <option value=GuerschonYabusele>Guerschon Yabusele</option>
+                <option value=PJDozier>PJ Dozier</option>
+                <option value=R.J.Hunter>R.J. Hunter</option>
+                <option value=JarrettAllen>Jarrett Allen</option>
+                <option value=EdDavis>Ed Davis</option>
+                <option value=SpencerDinwiddie>Spencer Dinwiddie</option>
+                <option value=RodionsKurucs>Rodions Kurucs</option>
+                <option value=D'AngeloRussell>D'Angelo Russell</option>
+                <option value=JaredDudley>Jared Dudley</option>
+                <option value=AllenCrabbe>Allen Crabbe</option>
+                <option value=JoeHarris>Joe Harris</option>
+                <option value=RondaeHollis-Jefferson>Rondae Hollis-Jefferson</option>
+                <option value=DeMarreCarroll>DeMarre Carroll</option>
+                <option value=ShabazzNapier>Shabazz Napier</option>
+                <option value=D敼nanMusa>D敼nan Musa</option>
+                <option value=KennethFaried>Kenneth Faried</option>
+                <option value=TheoPinson>Theo Pinson</option>
+                <option value=TreveonGraham>Treveon Graham</option>
+                <option value=AlanWilliams>Alan Williams</option>
+                <option value=CarisLeVert>Caris LeVert</option>
+                <option value=MitchCreek>Mitch Creek</option>
+                <option value=TahjereMcCall>Tahjere McCall</option>
+                <option value=WayneSelden>Wayne Selden</option>
+                <option value=OttoPorter>Otto Porter</option>
+                <option value=LauriMarkkanen>Lauri Markkanen</option>
+                <option value=CristianoFel蝛妾io>Cristiano Fel蝛妾io</option>
+                <option value=RobinLopez>Robin Lopez</option>
+                <option value=ZachLaVine>Zach LaVine</option>
+                <option value=RyanArcidiacono>Ryan Arcidiacono</option>
+                <option value=ShaquilleHarrison>Shaquille Harrison</option>
+                <option value=Timoth?uwawu-Cabarrot>Timoth??Luwawu-Cabarrot</option>
+                <option value=AntonioBlakeney>Antonio Blakeney</option>
+                <option value=JabariParker>Jabari Parker</option>
+                <option value=BobbyPortis>Bobby Portis</option>
+                <option value=ChandlerHutchison>Chandler Hutchison</option>
+                <option value=KrisDunn>Kris Dunn</option>
+                <option value=BrandonSampson>Brandon Sampson</option>
+                <option value=RawleAlkins>Rawle Alkins</option>
+                <option value=JaKarrSampson>JaKarr Sampson</option>
+                <option value=JustinHoliday>Justin Holiday</option>
+                <option value=CameronPayne>Cameron Payne</option>
+                <option value=MalikMonk>Malik Monk</option>
+                <option value=JeremyLamb>Jeremy Lamb</option>
+                <option value=KembaWalker>Kemba Walker</option>
+                <option value=MarvinWilliams>Marvin Williams</option>
+                <option value=WillyHernang蝐mez>Willy Hernang蝐mez</option>
+                <option value=MilesBridges>Miles Bridges</option>
+                <option value=Devonte'Graham>Devonte' Graham</option>
+                <option value=DwayneBacon>Dwayne Bacon</option>
+                <option value=FrankKaminsky>Frank Kaminsky</option>
+                <option value=MichaelKidd-Gilchrist>Michael Kidd-Gilchrist</option>
+                <option value=NicolasBatum>Nicolas Batum</option>
+                <option value=CodyZeller>Cody Zeller</option>
+                <option value=TonyParker>Tony Parker</option>
+                <option value=ShelvinMack>Shelvin Mack</option>
+                <option value=AlecBurks>Alec Burks</option>
+                <option value=JordanClarkson>Jordan Clarkson</option>
+                <option value=CollinSexton>Collin Sexton</option>
+                <option value=JaronBlossomgame>Jaron Blossomgame</option>
+                <option value=ChanningFrye>Channing Frye</option>
+                <option value=CediOsman>Cedi Osman</option>
+                <option value=DavidNwaba>David Nwaba</option>
+                <option value=MatthewDellavedova>Matthew Dellavedova</option>
+                <option value=JalenJones>Jalen Jones</option>
+                <option value=RodneyHood>Rodney Hood</option>
+                <option value=J.R.Smith>J.R. Smith</option>
+                <option value=AndrewHarrison>Andrew Harrison</option>
+                <option value=KyleKorver>Kyle Korver</option>
+                <option value=SamDekker>Sam Dekker</option>
+                <option value=GeorgeHill>George Hill</option>
+                <option value=KevinLove>Kevin Love</option>
+                <option value=NikStauskas>Nik Stauskas</option>
+                <option value=BrandonKnight>Brandon Knight</option>
+                <option value=MarqueseChriss>Marquese Chriss</option>
+                <option value=DengAdel>Deng Adel</option>
+                <option value=PatrickMcCaw>Patrick McCaw</option>
+                <option value=DorianFinney-Smith>Dorian Finney-Smith</option>
+                <option value=TreyBurke>Trey Burke</option>
+                <option value=DwightPowell>Dwight Powell</option>
+                <option value=JalenBrunson>Jalen Brunson</option>
+                <option value=DevinHarris>Devin Harris</option>
+                <option value=CourtneyLee>Courtney Lee</option>
+                <option value=DirkNowitzki>Dirk Nowitzki</option>
+                <option value=LukaDon?i?>Luka Don?i?</option>
+                <option value=JustinJackson>Justin Jackson</option>
+                <option value=MaxiKleber>Maxi Kleber</option>
+                <option value=SalahMejri>Salah Mejri</option>
+                <option value=RyanBroekhoff>Ryan Broekhoff</option>
+                <option value=HarrisonBarnes>Harrison Barnes</option>
+                <option value=WesleyMatthews>Wesley Matthews</option>
+                <option value=DarylMacon>Daryl Macon</option>
+                <option value=J.J.Barea>J.J. Barea</option>
+                <option value=JamalMurray>Jamal Murray</option>
+                <option value=PaulMillsap>Paul Millsap</option>
+                <option value=NikolaJoki?>Nikola Joki?</option>
+                <option value=WillBarton>Will Barton</option>
+                <option value=MalikBeasley>Malik Beasley</option>
+                <option value=MasonPlumlee>Mason Plumlee</option>
+                <option value=TorreyCraig>Torrey Craig</option>
+                <option value=IsaiahThomas>Isaiah Thomas</option>
+                <option value=MonteMorris>Monte Morris</option>
+                <option value=GaryHarris>Gary Harris</option>
+                <option value=JarredVanderbilt>Jarred Vanderbilt</option>
+                <option value=TreyLyles>Trey Lyles</option>
+                <option value=JuanHernang蝐mez>Juan Hernang蝐mez</option>
+                <option value=ThomasWelsh>Thomas Welsh</option>
+                <option value=TylerLydon>Tyler Lydon</option>
+                <option value=DeVaughnAkoon-Purcell>DeVaughn Akoon-Purcell</option>
+                <option value=BrandonGoodwin>Brandon Goodwin</option>
+                <option value=AndreDrummond>Andre Drummond</option>
+                <option value=BlakeGriffin>Blake Griffin</option>
+                <option value=ReggieBullock>Reggie Bullock</option>
+                <option value=ReggieJackson>Reggie Jackson</option>
+                <option value=LangstonGalloway>Langston Galloway</option>
+                <option value=LukeKennard>Luke Kennard</option>
+                <option value=IshSmith>Ish Smith</option>
+                <option value=StanleyJohnson>Stanley Johnson</option>
+                <option value=ZazaPachulia>Zaza Pachulia</option>
+                <option value=BruceBrown>Bruce Brown</option>
+                <option value=JonLeuer>Jon Leuer</option>
+                <option value=Jos?alder蝐n>Jos??Calder蝐n</option>
+                <option value=KhyriThomas>Khyri Thomas</option>
+                <option value=HenryEllenson>Henry Ellenson</option>
+                <option value=WayneEllington>Wayne Ellington</option>
+                <option value=ThonMaker>Thon Maker</option>
+                <option value=JonasJerebko>Jonas Jerebko</option>
+                <option value=JordanBell>Jordan Bell</option>
+                <option value=KlayThompson>Klay Thompson</option>
+                <option value=KevonLooney>Kevon Looney</option>
+                <option value=StephenCurry>Stephen Curry</option>
+                <option value=QuinnCook>Quinn Cook</option>
+                <option value=AndreIguodala>Andre Iguodala</option>
+                <option value=AlfonzoMcKinnie>Alfonzo McKinnie</option>
+                <option value=KevinDurant>Kevin Durant</option>
+                <option value=ShaunLivingston>Shaun Livingston</option>
+                <option value=DamionLee>Damion Lee</option>
+                <option value=DraymondGreen>Draymond Green</option>
+                <option value=MarcusDerrickson>Marcus Derrickson</option>
+                <option value=JacobEvans>Jacob Evans</option>
+                <option value=DeMarcusCousins>DeMarcus Cousins</option>
+                <option value=GeraldGreen>Gerald Green</option>
+                <option value=EricGordon>Eric Gordon</option>
+                <option value=JamesHarden>James Harden</option>
+                <option value=ImanShumpert>Iman Shumpert</option>
+                <option value=AustinRivers>Austin Rivers</option>
+                <option value=IsaiahHartenstein>Isaiah Hartenstein</option>
+                <option value=ChrisPaul>Chris Paul</option>
+                <option value=JamesEnnis>James Ennis</option>
+                <option value=P.J.Tucker>P.J. Tucker</option>
+                <option value=GaryClark>Gary Clark</option>
+                <option value=JamesNunnally>James Nunnally</option>
+                <option value=DanuelHouse>Danuel House</option>
+                <option value=TerrenceJones>Terrence Jones</option>
+                <option value=MichaelCarter-Williams>Michael Carter-Williams</option>
+                <option value=CarmeloAnthony>Carmelo Anthony</option>
+                <option value=EdmondSumner>Edmond Sumner</option>
+                <option value=DougMcDermott>Doug McDermott</option>
+                <option value=AaronHoliday>Aaron Holiday</option>
+                <option value=T.J.Leaf>T.J. Leaf</option>
+                <option value=KyleO'Quinn>Kyle O'Quinn</option>
+                <option value=TyrekeEvans>Tyreke Evans</option>
+                <option value=MylesTurner>Myles Turner</option>
+                <option value=CoryJoseph>Cory Joseph</option>
+                <option value=VictorOladipo>Victor Oladipo</option>
+                <option value=BojanBogdanovi?>Bojan Bogdanovi?</option>
+                <option value=DomantasSabonis>Domantas Sabonis</option>
+                <option value=ThaddeusYoung>Thaddeus Young</option>
+                <option value=DarrenCollison>Darren Collison</option>
+                <option value=AlizeJohnson>Alize Johnson</option>
+                <option value=PatrickBeverley>Patrick Beverley</option>
+                <option value=DaniloGallinari>Danilo Gallinari</option>
+                <option value=TobiasHarris>Tobias Harris</option>
+                <option value=Milo蝳袍eodosi?>Milo蝳?Teodosi?</option>
+                <option value=MontrezlHarrell>Montrezl Harrell</option>
+                <option value=AveryBradley>Avery Bradley</option>
+                <option value=ShaiGilgeous-Alexander>Shai Gilgeous-Alexander</option>
+                <option value=MikeScott>Mike Scott</option>
+                <option value=LouWilliams>Lou Williams</option>
+                <option value=BobanMarjanovi?>Boban Marjanovi?</option>
+                <option value=SindariusThornwell>Sindarius Thornwell</option>
+                <option value=TyroneWallace>Tyrone Wallace</option>
+                <option value=JohnathanMotley>Johnathan Motley</option>
+                <option value=JeromeRobinson>Jerome Robinson</option>
+                <option value=LandryShamet>Landry Shamet</option>
+                <option value=JaMychalGreen>JaMychal Green</option>
+                <option value=GarrettTemple>Garrett Temple</option>
+                <option value=WilsonChandler>Wilson Chandler</option>
+                <option value=LucMbahaMoute>Luc Mbah a Moute</option>
+                <option value=KentaviousCaldwell-Pope>Kentavious Caldwell-Pope</option>
+                <option value=LanceStephenson>Lance Stephenson</option>
+                <option value=MoritzWagner>Moritz Wagner</option>
+                <option value=BrandonIngram>Brandon Ingram</option>
+                <option value=JaValeMcGee>JaVale McGee</option>
+                <option value=SviatoslavMykhailiuk>Sviatoslav Mykhailiuk</option>
+                <option value=JoshHart>Josh Hart</option>
+                <option value=MichaelBeasley>Michael Beasley</option>
+                <option value=KyleKuzma>Kyle Kuzma</option>
+                <option value=RajonRondo>Rajon Rondo</option>
+                <option value=LeBronJames>LeBron James</option>
+                <option value=LonzoBall>Lonzo Ball</option>
+                <option value=TysonChandler>Tyson Chandler</option>
+                <option value=AlexCaruso>Alex Caruso</option>
+                <option value=MikeMuscala>Mike Muscala</option>
+                <option value=ScottMachado>Scott Machado</option>
+                <option value=JohnathanWilliams>Johnathan Williams</option>
+                <option value=JemerrioJones>Jemerrio Jones</option>
+                <option value=IsaacBonga>Isaac Bonga</option>
+                <option value=MarcGasol>Marc Gasol</option>
+                <option value=KyleAnderson>Kyle Anderson</option>
+                <option value=JoakimNoah>Joakim Noah</option>
+                <option value=MarShonBrooks>MarShon Brooks</option>
+                <option value=MikeConley>Mike Conley</option>
+                <option value=OmriCasspi>Omri Casspi</option>
+                <option value=JevonCarter>Jevon Carter</option>
+                <option value=DillonBrooks>Dillon Brooks</option>
+                <option value=IvanRabb>Ivan Rabb</option>
+                <option value=YutaWatanabe>Yuta Watanabe</option>
+                <option value=BrunoCaboclo>Bruno Caboclo</option>
+                <option value=JulianWashburn>Julian Washburn</option>
+                <option value=TylerZeller>Tyler Zeller</option>
+                <option value=DelonWright>Delon Wright</option>
+                <option value=ChandlerParsons>Chandler Parsons</option>
+                <option value=JonasValan?i韐as>Jonas Valan?i韐as</option>
+                <option value=C.J.Miles>C.J. Miles</option>
+                <option value=DustyHannahs>Dusty Hannahs</option>
+                <option value=JoshRichardson>Josh Richardson</option>
+                <option value=HassanWhiteside>Hassan Whiteside</option>
+                <option value=TylerJohnson>Tyler Johnson</option>
+                <option value=DionWaiters>Dion Waiters</option>
+                <option value=JustiseWinslow>Justise Winslow</option>
+                <option value=DwyaneWade>Dwyane Wade</option>
+                <option value=KellyOlynyk>Kelly Olynyk</option>
+                <option value=RodneyMcGruder>Rodney McGruder</option>
+                <option value=JamesJohnson>James Johnson</option>
+                <option value=BamAdebayo>Bam Adebayo</option>
+                <option value=GoranDragi?>Goran Dragi?</option>
+                <option value=UdonisHaslem>Udonis Haslem</option>
+                <option value=DuncanRobinson>Duncan Robinson</option>
+                <option value=RyanAnderson>Ryan Anderson</option>
+                <option value=TonySnell>Tony Snell</option>
+                <option value=MalcolmBrogdon>Malcolm Brogdon</option>
+                <option value=KhrisMiddleton>Khris Middleton</option>
+                <option value=GiannisAntetokounmpo>Giannis Antetokounmpo</option>
+                <option value=EricBledsoe>Eric Bledsoe</option>
+                <option value=D.J.Wilson>D.J. Wilson</option>
+                <option value=BrookLopez>Brook Lopez</option>
+                <option value=SterlingBrown>Sterling Brown</option>
+                <option value=PatConnaughton>Pat Connaughton</option>
+                <option value=Ersan镼子yasova>Ersan 镼子yasova</option>
+                <option value=DonteDiVincenzo>Donte DiVincenzo</option>
+                <option value=JohnHenson>John Henson</option>
+                <option value=ChristianWood>Christian Wood</option>
+                <option value=NikolaMiroti?>Nikola Miroti?</option>
+                <option value=PauGasol>Pau Gasol</option>
+                <option value=BonzieColson>Bonzie Colson</option>
+                <option value=TimFrazier>Tim Frazier</option>
+                <option value=JasonSmith>Jason Smith</option>
+                <option value=JaylenMorris>Jaylen Morris</option>
+                <option value=Dario?ari?>Dario ?ari?</option>
+                <option value=DerrickRose>Derrick Rose</option>
+                <option value=AndrewWiggins>Andrew Wiggins</option>
+                <option value=RobertCovington>Robert Covington</option>
+                <option value=Karl-AnthonyTowns>Karl-Anthony Towns</option>
+                <option value=JoshOkogie>Josh Okogie</option>
+                <option value=TajGibson>Taj Gibson</option>
+                <option value=JerrydBayless>Jerryd Bayless</option>
+                <option value=TyusJones>Tyus Jones</option>
+                <option value=GorguiDieng>Gorgui Dieng</option>
+                <option value=JeffTeague>Jeff Teague</option>
+                <option value=AnthonyTolliver>Anthony Tolliver</option>
+                <option value=JimmyButler>Jimmy Butler</option>
+                <option value=KeitaBates-Diop>Keita Bates-Diop</option>
+                <option value=C.J.Williams>C.J. Williams</option>
+                <option value=CameronReynolds>Cameron Reynolds</option>
+                <option value=JaredTerrell>Jared Terrell</option>
+                <option value=LuolDeng>Luol Deng</option>
+                <option value=IsaiahCanaan>Isaiah Canaan</option>
+                <option value=SolomonHill>Solomon Hill</option>
+                <option value=JuliusRandle>Julius Randle</option>
+                <option value=JrueHoliday>Jrue Holiday</option>
+                <option value=CheickDiallo>Cheick Diallo</option>
+                <option value=AnthonyDavis>Anthony Davis</option>
+                <option value=DariusMiller>Darius Miller</option>
+                <option value=E'TwaunMoore>E'Twaun Moore</option>
+                <option value=FrankJackson>Frank Jackson</option>
+                <option value=WesleyJohnson>Wesley Johnson</option>
+                <option value=JahlilOkafor>Jahlil Okafor</option>
+                <option value=KenrichWilliams>Kenrich Williams</option>
+                <option value=IanClark>Ian Clark</option>
+                <option value=ElfridPayton>Elfrid Payton</option>
+                <option value=DamyeanDotson>Damyean Dotson</option>
+                <option value=EmmanuelMudiay>Emmanuel Mudiay</option>
+                <option value=LukeKornet>Luke Kornet</option>
+                <option value=AllonzoTrier>Allonzo Trier</option>
+                <option value=KevinKnox>Kevin Knox</option>
+                <option value=MarioHezonja>Mario Hezonja</option>
+                <option value=KadeemAllen>Kadeem Allen</option>
+                <option value=LanceThomas>Lance Thomas</option>
+                <option value=NoahVonleh>Noah Vonleh</option>
+                <option value=JohnJenkins>John Jenkins</option>
+                <option value=EnesKanter>Enes Kanter</option>
+                <option value=FrankNtilikina>Frank Ntilikina</option>
+                <option value=RonBaker>Ron Baker</option>
+                <option value=BillyGarrett>Billy Garrett</option>
+                <option value=StevenAdams>Steven Adams</option>
+                <option value=PaulGeorge>Paul George</option>
+                <option value=JeramiGrant>Jerami Grant</option>
+                <option value=?lexAbrines>?lex Abrines</option>
+                <option value=TerranceFerguson>Terrance Ferguson</option>
+                <option value=DennisSchr蝜鉅er>Dennis Schr蝜鉅er</option>
+                <option value=PatrickPatterson>Patrick Patterson</option>
+                <option value=RussellWestbrook>Russell Westbrook</option>
+                <option value=HamidouDiallo>Hamidou Diallo</option>
+                <option value=RaymondFelton>Raymond Felton</option>
+                <option value=AbdelNader>Abdel Nader</option>
+                <option value=DeonteBurton>Deonte Burton</option>
+                <option value=MarkieffMorris>Markieff Morris</option>
+                <option value=JonathonSimmons>Jonathon Simmons</option>
+                <option value=EvanFournier>Evan Fournier</option>
+                <option value=AaronGordon>Aaron Gordon</option>
+                <option value=TerrenceRoss>Terrence Ross</option>
+                <option value=NikolaVu?evi?>Nikola Vu?evi?</option>
+                <option value=WesleyIwundu>Wesley Iwundu</option>
+                <option value=JonathanIsaac>Jonathan Isaac</option>
+                <option value=JerianGrant>Jerian Grant</option>
+                <option value=IsaiahBriscoe>Isaiah Briscoe</option>
+                <option value=D.J.Augustin>D.J. Augustin</option>
+                <option value=JarellMartin>Jarell Martin</option>
+                <option value=KhemBirch>Khem Birch</option>
+                <option value=MelvinFrazier>Melvin Frazier</option>
+                <option value=J.J.Redick>J.J. Redick</option>
+                <option value=T.J.McConnell>T.J. McConnell</option>
+                <option value=JoelEmbiid>Joel Embiid</option>
+                <option value=BenSimmons>Ben Simmons</option>
+                <option value=FurkanKorkmaz>Furkan Korkmaz</option>
+                <option value=JonahBolden>Jonah Bolden</option>
+                <option value=AmirJohnson>Amir Johnson</option>
+                <option value=CoreyBrewer>Corey Brewer</option>
+                <option value=ShakeMilton>Shake Milton</option>
+                <option value=ZhaireSmith>Zhaire Smith</option>
+                <option value=HaywoodHighsmith>Haywood Highsmith</option>
+                <option value=MarkelleFultz>Markelle Fultz</option>
+                <option value=GregMonroe>Greg Monroe</option>
+                <option value=DemetriusJackson>Demetrius Jackson</option>
+                <option value=JustinPatton>Justin Patton</option>
+                <option value=MikalBridges>Mikal Bridges</option>
+                <option value=JoshJackson>Josh Jackson</option>
+                <option value=DeandreAyton>Deandre Ayton</option>
+                <option value=DevinBooker>Devin Booker</option>
+                <option value=T.J.Warren>T.J. Warren</option>
+                <option value=De'AnthonyMelton>De'Anthony Melton</option>
+                <option value=DraganBender>Dragan Bender</option>
+                <option value=TroyDaniels>Troy Daniels</option>
+                <option value=TrevorAriza>Trevor Ariza</option>
+                <option value=ElieOkobo>Elie Okobo</option>
+                <option value=JamalCrawford>Jamal Crawford</option>
+                <option value=RaySpalding>Ray Spalding</option>
+                <option value=QuincyAcy>Quincy Acy</option>
+                <option value=JimmerFredette>Jimmer Fredette</option>
+                <option value=JakeLayman>Jake Layman</option>
+                <option value=CJMcCollum>CJ McCollum</option>
+                <option value=JusufNurki?>Jusuf Nurki?</option>
+                <option value=MeyersLeonard>Meyers Leonard</option>
+                <option value=SethCurry>Seth Curry</option>
+                <option value=DamianLillard>Damian Lillard</option>
+                <option value=Al-FarouqAminu>Al-Farouq Aminu</option>
+                <option value=MauriceHarkless>Maurice Harkless</option>
+                <option value=EvanTurner>Evan Turner</option>
+                <option value=ZachCollins>Zach Collins</option>
+                <option value=CalebSwanigan>Caleb Swanigan</option>
+                <option value=AnferneeSimons>Anfernee Simons</option>
+                <option value=SkalLabissi?〉e>Skal Labissi?〉e</option>
+                <option value=WadeBaldwin>Wade Baldwin</option>
+                <option value=WillieCauley-Stein>Willie Cauley-Stein</option>
+                <option value=YogiFerrell>Yogi Ferrell</option>
+                <option value=BuddyHield>Buddy Hield</option>
+                <option value=TroyWilliams>Troy Williams</option>
+                <option value=De'AaronFox>De'Aaron Fox</option>
+                <option value=BogdanBogdanovi?>Bogdan Bogdanovi?</option>
+                <option value=NemanjaBjelica>Nemanja Bjelica</option>
+                <option value=HarryGiles>Harry Giles</option>
+                <option value=BenMcLemore>Ben McLemore</option>
+                <option value=LaMarcusAldridge>LaMarcus Aldridge</option>
+                <option value=PattyMills>Patty Mills</option>
+                <option value=RudyGay>Rudy Gay</option>
+                <option value=BrynForbes>Bryn Forbes</option>
+                <option value=DerrickWhite>Derrick White</option>
+                <option value=DeMarDeRozan>DeMar DeRozan</option>
+                <option value=MarcoBelinelli>Marco Belinelli</option>
+                <option value=D?visBert?ns>D?vis Bert?ns</option>
+                <option value=DanteCunningham>Dante Cunningham</option>
+                <option value=ChimezieMetu>Chimezie Metu</option>
+                <option value=QuincyPondexter>Quincy Pondexter</option>
+                <option value=LonnieWalker>Lonnie Walker</option>
+                <option value=ChrisBoucher>Chris Boucher</option>
+                <option value=OGAnunoby>OG Anunoby</option>
+                <option value=MalcolmMiller>Malcolm Miller</option>
+                <option value=JordanLoyd>Jordan Loyd</option>
+                <option value=JodieMeeks>Jodie Meeks</option>
+                <option value=NormanPowell>Norman Powell</option>
+                <option value=FredVanVleet>Fred VanVleet</option>
+                <option value=PascalSiakam>Pascal Siakam</option>
+                <option value=DannyGreen>Danny Green</option>
+                <option value=KawhiLeonard>Kawhi Leonard</option>
+                <option value=SergeIbaka>Serge Ibaka</option>
+                <option value=KyleLowry>Kyle Lowry</option>
+                <option value=MalachiRichardson>Malachi Richardson</option>
+                <option value=LorenzoBrown>Lorenzo Brown</option>
+                <option value=DonovanMitchell>Donovan Mitchell</option>
+                <option value=JoeIngles>Joe Ingles</option>
+                <option value=RoyceO'Neale>Royce O'Neale</option>
+                <option value=JaeCrowder>Jae Crowder</option>
+                <option value=GeorgesNiang>Georges Niang</option>
+                <option value=GraysonAllen>Grayson Allen</option>
+                <option value=RickyRubio>Ricky Rubio</option>
+                <option value=DerrickFavors>Derrick Favors</option>
+                <option value=RaulNeto>Raul Neto</option>
+                <option value=ThaboSefolosha>Thabo Sefolosha</option>
+                <option value=TylerCavanaugh>Tyler Cavanaugh</option>
+                <option value=DanteExum>Dante Exum</option>
+                <option value=NazMitrou-Long>Naz Mitrou-Long</option>
+                <option value=ChassonRandle>Chasson Randle</option>
+                <option value=JeffGreen>Jeff Green</option>
+                <option value=Tom?箇有Satoransk蝢?Tom?箇有 Satoransk蝢?/option>
+                <option value=BradleyBeal>Bradley Beal</option>
+                <option value=ThomasBryant>Thomas Bryant</option>
+                <option value=IanMahinmi>Ian Mahinmi</option>
+                <option value=JordanMcRae>Jordan McRae</option>
+                <option value=JohnWall>John Wall</option>
+                <option value=DevinRobinson>Devin Robinson</option>
+
+
+            </select>
+        </div>
+    </div>
+    <div style="text-align: center;position: relative">
+        <script>
+            var margin = { top: 66, right: 110, bottom: 20, left: 188 },
+                width = document.body.clientWidth - margin.left - margin.right,
+                height = 340 - margin.top - margin.bottom,
+                innerHeight = height - 2;
+
+            var devicePixelRatio = window.devicePixelRatio || 1;
+            var color = d3.scaleOrdinal()
+                .domain(["WAS", "UTA", "SAS", "PHO", "NYK", "MIN", "MIA", "MEM", "HOU", "DET", "DAL", "CLE", "CHO", "CHI", "OKC", "ORL", "LAC", "POR", "ATL", "SAC", "BRK", "DEN", "TOR", "IND", "PHI", "BOS", "MIL", "GSW", "NOP", "LAL"])
+                .range(["#002B5C", "#002B5C", "#C4CED4", "#1D1160", "#006BB6", "#0C2340", "#98002E", "#5D76A9", "#CE1141", "#C8102E", "#00538C", "#860038", "#1D1160", "#CE1141", "#007AC1", "#0077C0", "#C8102E", "#E03A3E", "#C1D32F", "#5A2D81", "#000000", "#0E2240", "#CE1141", "#002D62", "#006BB6", "#007A33", "#00471B", "#1D428A", "#0C2340", "#552583"])
+
+            var collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+            var types = {
+                "Number": {
+                    key: "Number",
+                    coerce: function (d) { return +d; },
+                    extent: d3.extent,
+                    within: function (d, extent, dim) { return extent[0] <= dim.scale(d) && dim.scale(d) <= extent[1]; },
+                    defaultScale: d3.scaleLinear().range([innerHeight, 0])
+                },
+                "String": {
+                    key: "String",
+                    coerce: String,
+                    extent: function (data) {
+                        return data.sort(collator.compare);
+
+                    },
+                    within: function (d, extent, dim) { return extent[0] <= dim.scale(d) && dim.scale(d) <= extent[1]; },
+                    defaultScale: d3.scalePoint().range([0, innerHeight])
+                },
+                "Date": {
+                    key: "Date",
+                    coerce: function (d) { return new Date(d); },
+                    extent: d3.extent,
+                    within: function (d, extent, dim) { return extent[0] <= dim.scale(d) && dim.scale(d) <= extent[1]; },
+                    defaultScale: d3.scaleTime().range([0, innerHeight])
+                }
+            };
+
+            var dimensions = [
+                {
+                    key: "Assister",
+                    description: "Assister",
+                    type: types["String"],
+                    axis: d3.axisLeft()
+                        .tickFormat(function (d, i) {
+                            return d;
+                        })
+                },
+                {
+                    key: "Make",
+                    type: types["Number"],
+                    scale: d3.scaleSqrt().range([innerHeight, 0])
+                },
+                {
+                    key: "AvgPoints",
+                    type: types["Number"],
+                    scale: d3.scaleSqrt().range([innerHeight, 0])
+                },
+                {
+                    key: "Age",
+                    type: types["Number"],
+                    scale: d3.scaleSqrt().range([innerHeight, 0])
+                },
+                {
+                    key: "AvgBLK",
+                    type: types["Number"],
+                    scale: d3.scaleSqrt().range([innerHeight, 0])
+                },
+                {
+                    key: "AvgSTL",
+                    type: types["Number"],
+                    scale: d3.scaleSqrt().range([innerHeight, 0])
+                },
+                {
+                    key: "AvgAST",
+                    type: types["Number"],
+                    scale: d3.scaleSqrt().range([innerHeight, 0])
+                },
+                {
+                    key: "Avg3points",
+                    type: types["Number"],
+                    scale: d3.scaleSqrt().range([innerHeight, 0])
+                },
+                {
+                    key: "Team",
+                    description: "Team",
+                    type: types["String"],
+                    axis: d3.axisRight()
+                        .tickFormat(function (d, i) {
+                            return d;
+                        })
+                }
+            ];
+
+            var xscale = d3.scalePoint()
+                .domain(d3.range(dimensions.length))
+                .range([0, width]);
+
+            var yAxis = d3.axisLeft();
+
+            var container = d3.select("body").append("div")
+                .attr("class", "parcoords")
+                .style("width", width + margin.left + margin.right + "px")
+                .style("height", height + margin.top + margin.bottom + "px");
+
+            var svg = container.append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var canvas = container.append("canvas")
+                .attr("width", width * devicePixelRatio)
+                .attr("height", height * devicePixelRatio)
+                .style("width", width + "px")
+                .style("height", height + "px")
+                .style("margin-top", margin.top + "px")
+                .style("margin-left", margin.left + "px");
+
+            var ctx = canvas.node().getContext("2d");
+            ctx.globalCompositeOperation = 'darken';
+            ctx.globalAlpha = 0.15;
+            ctx.lineWidth = 3;
+            ctx.scale(devicePixelRatio, devicePixelRatio);
+
+            var output = d3.select("body").append("pre").style("text-align", "center").style("position", "relative");
+
+            var axes = svg.selectAll(".axis")
+                .data(dimensions)
+                .enter().append("g")
+                .attr("class", function (d) { return "axis " + d.key.replace(/ /g, "_"); })
+                .attr("transform", function (d, i) { return "translate(" + xscale(i) + ")"; });
+            function update(selectedGroup) {
+                d3.csv("https://raw.githubusercontent.com/k6784ck/rawdata/master/parnerDataFull2.csv", function (error, data) {
+
+                    if (error) throw error;
+                    var data = data.filter(function (d) { return d.Player == selectedGroup })
+                    // shuffle the data!
+                    data = d3.shuffle(data);
+
+                    data.forEach(function (d) {
+                        dimensions.forEach(function (p) {
+                            d[p.key] = !d[p.key] ? null : p.type.coerce(d[p.key]);
+                        });
+
+                        // truncate long text strings to fit in data table
+                        for (var key in d) {
+                            if (d[key] && d[key].length > 35) d[key] = d[key].slice(0, 36);
+                        }
+                    });
+
+                    // type/dimension default setting happens here
+                    dimensions.forEach(function (dim) {
+                        if (!("domain" in dim)) {
+                            // detect domain using dimension type's extent function
+                            dim.domain = d3_functor(dim.type.extent)(data.map(function (d) { return d[dim.key]; }));
+                        }
+                        if (!("scale" in dim)) {
+                            // use type's default scale for dimension
+                            dim.scale = dim.type.defaultScale.copy();
+                        }
+                        dim.scale.domain(dim.domain);
+                    });
+
+                    var render = renderQueue(draw).rate(50);
+
+                    ctx.clearRect(0, 0, width, height);
+                    ctx.globalAlpha = d3.min([0.85 / Math.pow(data.length, 0.3), 1]);
+                    render(data);
+
+
+                    axes.append("g")
+                        .each(function (d) {
+                            var renderAxis = "axis" in d
+                                ? d.axis.scale(d.scale)  // custom axis
+                                : yAxis.scale(d.scale);  // default axis
+                            d3.select(this).call(renderAxis);
+                        })
+                        .append("text")
+                        .attr("class", "title")
+                        .attr("text-anchor", "start")
+                        .text(function (d) { return "description" in d ? d.description : d.key; });
+
+                    // Add and store a brush for each axis.
+                    axes.append("g")
+                        .attr("class", "brush")
+                        .each(function (d) {
+                            d3.select(this).call(d.brush = d3.brushY()
+                                .extent([[-10, 0], [10, height]])
+                                .on("start", brushstart)
+                                .on("brush", brush)
+                                .on("end", brush)
+                            )
+                        })
+                        .selectAll("rect")
+                        .attr("x", -8)
+                        .attr("width", 16);
+                    /*d3.selectAll(".axis.Assister .tick text")
+                        .style("fill", colorPL);*/
+                    d3.selectAll(".axis.Team .tick text")
+                        .style("fill", color);
+
+                    output.text(d3.tsvFormat(data.slice(0, 24)));
+
+                    function project(d) {
+                        return dimensions.map(function (p, i) {
+                            // check if data element has property and contains a value
+                            if (
+                                !(p.key in d) ||
+                                d[p.key] === null
+                            ) return null;
+
+                            return [xscale(i), p.scale(d[p.key])];
+                        });
+                    };
+
+                    function draw(d) {
+                        ctx.strokeStyle = color(d.Team);
+                        ctx.beginPath();
+                        var coords = project(d);
+                        coords.forEach(function (p, i) {
+                            // this tricky bit avoids rendering null values as 0
+                            if (p === null) {
+                                // this bit renders horizontal lines on the previous/next
+                                // dimensions, so that sandwiched null values are visible
+                                if (i > 0) {
+                                    var prev = coords[i - 1];
+                                    if (prev !== null) {
+                                        ctx.moveTo(prev[0], prev[1]);
+                                        ctx.lineTo(prev[0] + 6, prev[1]);
+                                    }
+                                }
+                                if (i < coords.length - 1) {
+                                    var next = coords[i + 1];
+                                    if (next !== null) {
+                                        ctx.moveTo(next[0] - 6, next[1]);
+                                    }
+                                }
+                                return;
+                            }
+
+                            if (i == 0) {
+                                ctx.moveTo(p[0], p[1]);
+                                return;
+                            }
+
+                            ctx.lineTo(p[0], p[1]);
+                        });
+                        ctx.stroke();
+                    }
+
+                    function brushstart() {
+                        d3.event.sourceEvent.stopPropagation();
+                    }
+
+                    // Handles a brush event, toggling the display of foreground lines.
+                    function brush() {
+                        render.invalidate();
+
+                        var actives = [];
+                        svg.selectAll(".axis .brush")
+                            .filter(function (d) {
+                                return d3.brushSelection(this);
+                            })
+                            .each(function (d) {
+                                actives.push({
+                                    dimension: d,
+                                    extent: d3.brushSelection(this)
+                                });
+                            });
+
+                        var selected = data.filter(function (d) {
+                            if (actives.every(function (active) {
+                                var dim = active.dimension;
+                                // test if point is within extents for each active brush
+                                return dim.type.within(d[dim.key], active.extent, dim);
+                            })) {
+                                return true;
+                            }
+                        });
+
+                        // show ticks for active brush dimensions
+                        // and filter ticks to only those within brush extents
+
+                        svg.selectAll(".axis")
+                            .filter(function (d) {
+                                return actives.indexOf(d) > -1 ? true : false;
+                            })
+                            .classed("active", true)
+                            .each(function (dimension, i) {
+                                var extent = extents[i];
+                                d3.select(this)
+                                    .selectAll(".tick text")
+                                    .style("display", function (d) {
+                                        var value = dimension.type.coerce(d);
+                                        return dimension.type.within(value, extent, dimension) ? null : "none";
+                                    });
+                            });
+
+                        // reset dimensions without active brushes
+                        svg.selectAll(".axis")
+                            .filter(function (d) {
+                                return actives.indexOf(d) > -1 ? false : true;
+                            })
+                            .classed("active", false)
+                            .selectAll(".tick text")
+                            .style("display", null);
+
+
+                        ctx.clearRect(0, 0, width, height);
+                        ctx.globalAlpha = d3.min([0.85 / Math.pow(selected.length, 0.3), 1]);
+                        render(selected);
+
+                        output.text(d3.tsvFormat(selected.slice(0, 24)));
+                    }
+                });
+            }
+            d3.select("#team").on("change", function (d) {
+                // recover the option that has been chosen
+                var selectedOption = d3.select(this).property("value")
+                // run the updateChart function with this selected option
+                update(selectedOption)
+            })
+            function d3_functor(v) {
+                return typeof v === "function" ? v : function () { return v; };
+            };
+
+
+        </script>
+    </div>

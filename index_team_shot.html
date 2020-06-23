@@ -1,97 +1,108 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8"> 
-    <title>d3.basketball-shot-chart</title>
-    <link rel="stylesheet" type="text/css" href="d3.basketball-shot-chart.css">
-    <link rel="stylesheet" type="text/css" href="button.css">  <!-- 控制按鈕的css -->
-    <script src="https://d3js.org/d3.v3.min.js"></script>
-    <script src="http://rawgit.com/virajsanghvi/d3-plugins/master/hexbin/hexbin.js"></script>
-    <script src="http://rawgit.com/misoproject/d3.chart/master/d3.chart.js"></script>
-    <script src="http://rawgit.com/virajsanghvi/d3.chart.defaults/master/d3.chart.defaults.js"></script>
-    <script src="d3.basketball-shot-chart.js"></script>
 
-    <style>
-        svg { font-family: Arial, sans-serif; }
-        body {font-family: Arial, sans-serif;}
-    </style>
-  </head>
-  <body>
-            <!--功能列-->
-            <div style="width:100%; height: 100px; overflow: hidden; background-color: beige;">
+<head>
+  <meta charset="UTF-8">
+  <title>d3.basketball-shot-chart</title>
+  <link rel="stylesheet" type="text/css" href="d3.basketball-shot-chart.css">
+  <link rel="stylesheet" type="text/css" href="button.css"> <!-- 控制按鈕的css -->
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="http://rawgit.com/virajsanghvi/d3-plugins/master/hexbin/hexbin.js"></script>
+  <script src="http://rawgit.com/misoproject/d3.chart/master/d3.chart.js"></script>
+  <script src="http://rawgit.com/virajsanghvi/d3.chart.defaults/master/d3.chart.defaults.js"></script>
+  <script src="d3.basketball-shot-chart.js"></script>
 
-              <div id="nba-logo" style="float: left">
-                <img src="NBA Logo.jfif" style="width: 300px; height: 100px">
-              </div>
-                <div class="button_div" style="float: right">
+  <style>
+    svg {
+      font-family: Arial, sans-serif;
+    }
 
-                  <form action="index.html" style="float: right">
-                    <button class="button" >球員助攻關係</button>
-                  </form>
-                        
-                  <form action="player_assist.html" style="float: right">
-                    <button class="button" >球員助攻分布圖</button>
-                  </form>
-                        
-                  <form action="index_team_shot.html" style="float: right">
-                    <button class="button" >球隊投籃分布圖</button>
-                  </form>                   
+    body {
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
 
-                </div>
+<body>
+  <!--功能列-->
+  <div style="width:100%; height: 100px; overflow: hidden; background-color: beige;">
 
-            </div>
-            <!--功能列-->
+    <div id="nba-logo" style="float: left">
+      <img src="NBA Logo.jfif" style="width: 300px; height: 100px">
+    </div>
+    <div class="button_div" style="float: right">
 
 
+      <form action="assist_team.html" style="float: right">
+        <button class="button">球員助攻關係</button>
+      </form>
+      <form action="index.html" style="float: right">
+        <button class="button">聯盟雙人組排行</button>
+      </form>
+
+      <form action="player_assist.html" style="float: right">
+        <button class="button">球員助攻分布圖</button>
+      </form>
+
+      <form action="index_team_shot.html" style="float: right">
+        <button class="button">球隊投籃分布圖</button>
+      </form>
+
+    </div>
+
+  </div>
+  <!--功能列-->
 
 
 
-    <!-- breaking indentation for display -->
 
-<div style="text-align: center;position: relative">
-  <h3>Team</h3>
-  <div id="select-season">
-    
-    <label for="team"></label>
-    <script>
+
+  <!-- breaking indentation for display -->
+
+  <div style="text-align: center;position: relative">
+    <h3>Team</h3>
+    <div id="select-season">
+
+      <label for="team"></label>
+      <script>
         function selectTeam() {
-            //Ante Žižić
+          //Ante Žižić
         }
-    </script>
-    <select name="team" id="team" style="size: 30; overflow-y: auto; text-align: center;" onchange="selectTeam()">
-    <option value=ATL>Atlanta Hawks</option>
-    <option value=BOS>Boston Celtics</option>
-    <option value=BRK>Brooklyn Nets/New Jersey Nets</option>
-    <option value=CHI>Chicago Bulls</option>
-    <option value=CHO>Charlotte Hornets/Bobcats </option>
-    <option value=CLE>Cleveland Cavaliers</option>
-    <option value=DAL>Dallas Mavericks</option>
-    <option value=DEN>Denver Nuggets</option>
-    <option value=DET>Detroit Pistons</option>
-    <option value=GSW>Golden State Warriors</option>
-    <option value=HOU>Houston Rockets</option>
-    <option value=IND>Indiana Pacers</option>
-    <option value=LAC>Los Angeles Clippers</option>
-    <option value=LAL>Los Angeles Lakers</option>
-    <option value=MEM>Memphis Grizzlies/Vancouver Grizzlies</option>
-    <option value=MIA>Miami Heat</option>
-    <option value=MIL>Milwaukee Bucks</option>
-    <option value=MIN>Minnesota Timberwolves</option>
-    <option value=NOP>New Orleans Pelicans/New Orleans (Oklahoma City) Hornets</option>
-    <option value=NYK>New York Knicks</option>
-    <option value=OKC>Oklahoma City Thunder/Seattle Supersonics </option>
-    <option value=ORL>Orlando Magic</option>
-    <option value=PHI>Philadelphia 76ers</option>
-    <option value=PHO>Phoenix Suns</option>
-    <option value=POR>Portland Trail Blazers</option>
-    <option value=SAC>Sacramento Kings</option>
-    <option value=SAS>San Antonio Spurs</option>
-    <option value=TOR>Toronto Raptors</option>
-    <option value=UTA>Utah Jazz</option>
-    <option value=WAS>Washington Wizards</option>
+      </script>
+      <select name="team" id="team" style="size: 30; overflow-y: auto; text-align: center;" onchange="selectTeam()">
+        <option value=ATL>Atlanta Hawks</option>
+        <option value=BOS>Boston Celtics</option>
+        <option value=BRK>Brooklyn Nets/New Jersey Nets</option>
+        <option value=CHI>Chicago Bulls</option>
+        <option value=CHO>Charlotte Hornets/Bobcats </option>
+        <option value=CLE>Cleveland Cavaliers</option>
+        <option value=DAL>Dallas Mavericks</option>
+        <option value=DEN>Denver Nuggets</option>
+        <option value=DET>Detroit Pistons</option>
+        <option value=GSW>Golden State Warriors</option>
+        <option value=HOU>Houston Rockets</option>
+        <option value=IND>Indiana Pacers</option>
+        <option value=LAC>Los Angeles Clippers</option>
+        <option value=LAL>Los Angeles Lakers</option>
+        <option value=MEM>Memphis Grizzlies/Vancouver Grizzlies</option>
+        <option value=MIA>Miami Heat</option>
+        <option value=MIL>Milwaukee Bucks</option>
+        <option value=MIN>Minnesota Timberwolves</option>
+        <option value=NOP>New Orleans Pelicans/New Orleans (Oklahoma City) Hornets</option>
+        <option value=NYK>New York Knicks</option>
+        <option value=OKC>Oklahoma City Thunder/Seattle Supersonics </option>
+        <option value=ORL>Orlando Magic</option>
+        <option value=PHI>Philadelphia 76ers</option>
+        <option value=PHO>Phoenix Suns</option>
+        <option value=POR>Portland Trail Blazers</option>
+        <option value=SAC>Sacramento Kings</option>
+        <option value=SAS>San Antonio Spurs</option>
+        <option value=TOR>Toronto Raptors</option>
+        <option value=UTA>Utah Jazz</option>
+        <option value=WAS>Washington Wizards</option>
 
-</select>
-</div> 
+      </select>
+    </div>
 
     <!-- end -->
 
@@ -99,62 +110,63 @@
     <div id="chart">
     </div>
 
-</div>
+  </div>
 
-    <script>
+  <script>
 
-var svg = d3.select(document.getElementById('chart'))
-            .append("svg")
+    var svg = d3.select(document.getElementById('chart'))
+      .append("svg")
 
 
 
-function updateTeam(selectedTeam) {
-  d3.json("Full_made_18.json", function(data) {
-    d3.selectAll("svg > *").remove();
-    var selectedfiltedData = data.filter(function(d){return d.team==selectedTeam })
+    function updateTeam(selectedTeam) {
+      d3.json("https://raw.githubusercontent.com/k6784ck/json/master/Full_made_18.json", function (data) {
+        d3.selectAll("svg > *").remove();
+        var selectedfiltedData = data.filter(function (d) { return d.team == selectedTeam })
 
-          // Give these new data to update
-    svg
-      .chart("BasketballShotChart", {
-        width: 600, 
-        title: selectedTeam+' 2018-19',
-        hexagonFillValue: function(d) {  return d.z; }, 
-        // reverse the heat range to map our z values to other colors
-        heatScale: d3.scale.quantile()
-          .domain([0.30,0.70])
-          .range(['#5458A2', '#6689BB', '#FADC97', '#F08460', '#B02B48']),
-        hexagonBin: function (point, bin) {
-          var currentZ = bin.z || 0;
-          var totalAttempts = bin.attempts || 0;
-          var totalZ = currentZ * totalAttempts;
+        // Give these new data to update
+        svg
+          .chart("BasketballShotChart", {
+            width: 600,
+            title: selectedTeam + ' 2018-19',
+            hexagonFillValue: function (d) { return d.z; },
+            // reverse the heat range to map our z values to other colors
+            heatScale: d3.scale.quantile()
+              .domain([0.30, 0.70])
+              .range(['#5458A2', '#6689BB', '#FADC97', '#F08460', '#B02B48']),
+            hexagonBin: function (point, bin) {
+              var currentZ = bin.z || 0;
+              var totalAttempts = bin.attempts || 0;
+              var totalZ = currentZ * totalAttempts;
 
-          var attempts = point.attempts || 1;
-          bin.attempts = totalAttempts + attempts;
-          bin.z = (totalZ + (point.z * attempts))/bin.attempts;
-        },
-        // update radius threshold to at least 4 shots to clean up the chart
-        hexagonRadiusThreshold: 4,
+              var attempts = point.attempts || 1;
+              bin.attempts = totalAttempts + attempts;
+              bin.z = (totalZ + (point.z * attempts)) / bin.attempts;
+            },
+            // update radius threshold to at least 4 shots to clean up the chart
+            hexagonRadiusThreshold: 4,
+          })
+          .draw(selectedfiltedData)
+
+
+
+
+
+
       })
-        .draw(selectedfiltedData)
 
 
-  
+    }
 
+    d3.select("#team").on("change", function (d) {
+      var selectedteamOption = d3.select(this).property("value")
+      updateTeam(selectedteamOption)
+    })
 
-    
-  })
+    updateTeam("ATL")
 
+  </script>
 
-}
+</body>
 
-d3.select("#team").on("change", function(d) {
-  var selectedteamOption = d3.select(this).property("value")
-  updateTeam(selectedteamOption)
-  })
-
-updateTeam("ATL")
-
-    </script>
-
-  </body>
 </html>
