@@ -1,0 +1,31 @@
+.button_div{
+    height: 100px;
+}
+
+
+.button {
+    height: 90px;
+    background-color: beige;
+    border: 0px;
+    border-radius: 0px;
+    color: #17408B ;
+    padding: 0px 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 26px;
+    font-family: sans-serif;
+    font-weight: bold;
+    margin: 4px 5px;
+    cursor: pointer;
+}
+
+
+
+    .button:hover {
+        color: #FFFFFF; 
+        background-color: #17408B;
+        border: 0px; 
+        font-family: sans-serif;
+        font-weight: bold;
+    }

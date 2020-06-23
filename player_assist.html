@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+     <head>
+          <meta charset="UTF-8"> 
+          <!-- show UTF-8 format -->
+          <title>d3.player-assist-shot-chart</title>
+          <link rel="stylesheet" type="text/css" href="d3.basketball-shot-chart.css">
+          <link rel="stylesheet" type="text/css" href="button.css">  <!-- 控制按鈕的css -->
+          <script src="https://d3js.org/d3.v3.min.js"></script>
+          <script src="http://rawgit.com/virajsanghvi/d3-plugins/master/hexbin/hexbin.js"></script>
+          <script src="http://rawgit.com/misoproject/d3.chart/master/d3.chart.js"></script>
+          <script src="http://rawgit.com/virajsanghvi/d3.chart.defaults/master/d3.chart.defaults.js"></script>
+          <script src="d3.player-assist-shot-chart.js"></script>
+
+
+
+          <style>
+              svg { font-family: Arial, sans-serif; }
+              body {font-family: Arial, sans-serif;}
+          </style>
+     </head>
+     <body>
+
+            <!--功能列-->
+            <div style="width:100%; height: 100px; overflow: hidden; background-color: beige;">
+
+               <div id="nba-logo" style="float: left">
+                 <img src="NBA Logo.jfif" style="width: 300px; height: 100px">
+               </div>
+                 <div class="button_div" style="float: right">
+ 
+                   <form action="index.html" style="float: right">
+                     <button class="button" >球員助攻關係</button>
+                   </form>
+                         
+                   <form action="player_assist.html" style="float: right">
+                     <button class="button" >球員助攻分布圖</button>
+                   </form>
+                         
+                   <form action="index_team_shot.html" style="float: right">
+                     <button class="button" >球隊投籃分布圖</button>
+                   </form>                   
+ 
+                 </div>
+ 
+             </div>
+             <!--功能列-->
+ 
+
+               <div style="text-align: center;position: relative">
+               <h3>Team</h3>
+                    <select id="team-list" onchange="changeteam(this.selectedIndex)"></select>
+               <h3>Player</h3>
+                    <select id="player-list"></select>
+               <h3>球員投籃位置分布圖（由他人助攻）</h3>
+              </div>
+               <div id="chart" style="text-align: center;position: relative">
+               </div>
+
+          <script type="text/javascript">
+               var teams=['Atlanta Hawks','Boston Celtics','Brooklyn Nets/New Jersey Nets','Chicago Bulls','Charlotte Hornets/Bobcats ',
+                          'Cleveland Cavaliers','Dallas Mavericks','Denver Nuggets','Detroit Pistons','Golden State Warriors',
+                          'Houston Rockets','Indiana Pacers','Los Angeles Clippers','Los Angeles Lakers','Memphis Grizzlies/Vancouver Grizzlies',
+                          'Miami Heat','Milwaukee Bucks','Minnesota Timberwolves','New Orleans Pelicans/New Orleans (Oklahoma City) Hornets','New York Knicks',
+                          'Oklahoma City Thunder/Seattle Supersonics ','Orlando Magic','Philadelphia 76ers','Phoenix Suns','Portland Trail Blazers',
+                          'Sacramento Kings','San Antonio Spurs','Toronto Raptors','Utah Jazz','Washington Wizards'];
+               var teamSelect=document.getElementById("team-list");
+               var inner="";
+               for(var i=0;i<teams.length;i++){
+                    inner=inner+'<option value=i>'+teams[i]+'</option>';
+               }
+               teamSelect.innerHTML=inner;
+
+
+               var player=new Array();
+               player[0]  = ["John_Collins","Dewayne_Dedmon","Vince_Carter","Deyonta_Davis","DeAndre'_Bembry","Justin_Anderson","Kevin_Huerter","Jaylen_Adams","Alex_Len","Kent_Bazemore","Trae_Young","Taurean_Waller-Prince","Jeremy_Lin","Omari_Spellman","Alex_Poythress","Miles_Plumlee","Tyler_Dorsey","Daniel_Hamilton","Jordan_Sibert","Isaac_Humphries","B.J._Johnson"];
+               player[1]  = ["Al_Horford","Jayson_Tatum","Marcus_Smart","Terry_Rozier","Jaylen_Brown","Marcus_Morris","Aron_Baynes","Gordon_Hayward","Brad_Wanamaker","Kyrie_Irving","Daniel_Theis","Semi_Ojeleye","Robert_Williams","Guerschon_Yabusele","PJ_Dozier","R.J._Hunter"];
+               player[2]  = ["Jarrett_Allen","Ed_Davis","Spencer_Dinwiddie","Rodions_Kurucs","D'Angelo_Russell","Jared_Dudley","Allen_Crabbe","Joe_Harris","Rondae_Hollis-Jefferson","DeMarre_Carroll","Shabazz_Napier","Džanan_Musa","Kenneth_Faried","Theo_Pinson","Treveon_Graham","Alan_Williams","Caris_LeVert","Mitch_Creek","Tahjere_McCall"];
+               player[3]  = ["Wayne_Selden","Otto_Porter","Lauri_Markkanen","Cristiano_Felicio","Robin_Lopez","Zach_LaVine","Ryan_Arcidiacono","Shaquille_Harrison","Timothe_Luwawu-Cabarrot","Antonio_Blakeney","Jabari_Parker","Bobby_Portis","Chandler_Hutchison","Kris_Dunn","Brandon_Sampson","Rawle_Alkins","Walt_Lemon","JaKarr_Sampson","Justin_Holiday","Cameron_Payne","Wendell_Carter"];
+               player[4]  = ["Malik_Monk","Jeremy_Lamb","Kemba_Walker","Marvin_Williams","Willy_Hernangomez","Miles_Bridges","Bismack_Biyombo","Devonte'_Graham","Dwayne_Bacon","Frank_Kaminsky","Michael_Kidd-Gilchrist","Nicolas_Batum","Cody_Zeller","Tony_Parker","J.P._Macura","Shelvin_Mack","Joe_Chealey"];
+               player[5]  = ["Ante_Žižić","Alec_Burks","Jordan_Clarkson","Collin_Sexton","Jaron_Blossomgame","Larry_Nance","Channing_Frye","Cedi_Osman","David_Nwaba","Matthew_Dellavedova","Jalen_Jones","Rodney_Hood","Cameron_Payne","Tristan_Thompson","J.R._Smith","Andrew_Harrison","Kyle_Korver","Sam_Dekker","George_Hill","Kevin_Love","Nik_Stauskas","Brandon_Knight","Marquese_Chriss","Deng_Adel","Patrick_McCaw"];
+               player[6]  = ["Dorian_Finney-Smith","Trey_Burke","Dwight_Powell","Tim_Hardaway","Jalen_Brunson","Devin_Harris","Courtney_Lee","Dirk_Nowitzki","Luka_Dončić","Justin_Jackson","Maxi_Kleber","Salah_Mejri","Ryan_Broekhoff","Harrison_Barnes","DeAndre_Jordan","Wesley_Matthews","Dennis_Smith","Daryl_Macon","J.J._Barea"];
+               player[7]  = ["Jamal_Murray","Paul_Millsap","Nikola_Jokić","Will_Barton","Malik_Beasley","Mason_Plumlee","Torrey_Craig","Isaiah_Thomas","Monte_Morris","Gary_Harris","Jarred_Vanderbilt","Trey_Lyles","Juan_Hernangomez","Thomas_Welsh","Tyler_Lydon","DeVaughn_Akoon-Purcell","Nick_Young","Brandon_Goodwin"];
+               player[8]  = ["Andre_Drummond","Blake_Griffin","Reggie_Bullock","Reggie_Jackson","Langston_Galloway","Luke_Kennard","Glenn_Robinson","Ish_Smith","Stanley_Johnson","Zaza_Pachulia","Bruce_Brown","Jon_Leuer","Jose_Calderon","Khyri_Thomas","Henry_Ellenson","Wayne_Ellington","Thon_Maker","Sviatoslav_Mykhailiuk"];
+               player[9]  = ["Andrew_Bogut","Jonas_Jerebko","Jordan_Bell","Klay_Thompson","Kevon_Looney","Stephen_Curry","Quinn_Cook","Andre_Iguodala","Alfonzo_McKinnie","Kevin_Durant","Shaun_Livingston","Damion_Lee","Draymond_Green","Damian_Jones","Marcus_Derrickson","Jacob_Evans","DeMarcus_Cousins"];
+               player[10] = ["Gerald_Green","Austin_Rivers","Eric_Gordon","James_Harden","Iman_Shumpert","Kenneth_Faried","Isaiah_Hartenstein","Nene_Hilario","Chris_Paul","James_Ennis","P.J._Tucker","Clint_Capela","Gary_Clark","James_Nunnally","Danuel_House","Chris_Chiozza","Terrence_Jones","Marquese_Chriss","Vince_Edwards","Michael_Carter-Williams","Carmelo_Anthony","Zhou_Qi","Brandon_Knight"];
+               player[11] = ["Edmond_Sumner","Doug_McDermott","Davon_Reed","Aaron_Holiday","T.J._Leaf","Kyle_O'Quinn","Tyreke_Evans","Myles_Turner","Cory_Joseph","Victor_Oladipo","Bojan_Bogdanović","Domantas_Sabonis","Thaddeus_Young","Darren_Collison","Wesley_Matthews","Alize_Johnson"];
+               player[12] = ["Patrick_Beverley","Danilo_Gallinari","Tobias_Harris","Miloš_Teodosić","Montrezl_Harrell","Avery_Bradley","Shai_Gilgeous-Alexander","Mike_Scott","Lou_Williams","Boban_Marjanović","Marcin_Gortat","Sindarius_Thornwell","Tyrone_Wallace","Johnathan_Motley","Jerome_Robinson","Landry_Shamet","JaMychal_Green","Ivica_Zubac","Garrett_Temple","Wilson_Chandler","Angel_Delgado","Luc_Mbah_a_Moute"];
+               player[13] = ["Kentavious_Caldwell-Pope","Lance_Stephenson","Ivica_Zubac","Moritz_Wagner","Brandon_Ingram","JaVale_McGee","Sviatoslav_Mykhailiuk","Josh_Hart","Michael_Beasley","Kyle_Kuzma","Rajon_Rondo","Reggie_Bullock","LeBron_James","Lonzo_Ball","Tyson_Chandler","Alex_Caruso","Mike_Muscala","Scott_Machado","Johnathan_Williams","Jemerrio_Jones","Isaac_Bonga"];
+               player[14] = ["Jaren_Jackson","Marc_Gasol","Kyle_Anderson","JaMychal_Green","Joakim_Noah","Shelvin_Mack","MarShon_Brooks","Mike_Conley","Omri_Casspi","Garrett_Temple","Wayne_Selden","Jevon_Carter","Dillon_Brooks","Ivan_Rabb","Yuta_Watanabe","Tyler_Dorsey","Justin_Holiday","Bruno_Caboclo","Julian_Washburn","Tyler_Zeller","Delon_Wright","Chandler_Parsons","Avery_Bradley","Jonas_Valančiūnas","C.J._Miles","Dusty_Hannahs","D.J._Stephens"];
+               player[15] = ["Josh_Richardson","Derrick_Jones","Hassan_Whiteside","Tyler_Johnson","Dion_Waiters","Justise_Winslow","Dwyane_Wade","Kelly_Olynyk","Rodney_McGruder","James_Johnson","Bam_Adebayo","Wayne_Ellington","Goran_Dragić","Udonis_Haslem","Duncan_Robinson","Yante_Maten","Ryan_Anderson"];
+               player[16] = ["George_Hill","Tony_Snell","Malcolm_Brogdon","Khris_Middleton","Giannis_Antetokounmpo","Thon_Maker","Eric_Bledsoe","D.J._Wilson","Brook_Lopez","Sterling_Brown","Pat_Connaughton","Ersan_İlyasova","Donte_DiVincenzo","John_Henson","Christian_Wood","Matthew_Dellavedova","Nikola_Mirotić","Pau_Gasol","Bonzie_Colson","Tim_Frazier","Isaiah_Canaan","Trevon_Duval","Jason_Smith","Jaylen_Morris"];
+               player[17] = ["Dario_<U+0160>ari<U+0107>","Derrick_Rose","Andrew_Wiggins","Robert_Covington","Karl-Anthony_Towns","Josh_Okogie","Taj_Gibson","James_Nunnally","Jerryd_Bayless","Tyus_Jones","Gorgui_Dieng","Jeff_Teague","Anthony_Tolliver","Jimmy_Butler","Keita_Bates-Diop","C.J._Williams","Cameron_Reynolds","Jared_Terrell","Luol_Deng","Isaiah_Canaan","Mitch_Creek"];
+               player[18] = ["Solomon_Hill","Julius_Randle","Nikola_Mirotić","Tim_Frazier","Jrue_Holiday","Cheick_Diallo","Anthony_Davis","Darius_Miller","E'Twaun_Moore","Frank_Jackson","Wesley_Johnson","Jahlil_Okafor","Kenrich_Williams","Andrew_Harrison","Ian_Clark","Elfrid_Payton","Dairis_Bert<U+0101>ns","Christian_Wood","Stanley_Johnson","Jason_Smith"];
+               player[19] = ["Damyean_Dotson","DeAndre_Jordan","Emmanuel_Mudiay","Mitchell_Robinson","Luke_Kornet","Allonzo_Trier","Dennis_Smith","Kevin_Knox","Mario_Hezonja","Kadeem_Allen","Lance_Thomas","Henry_Ellenson","Noah_Vonleh","John_Jenkins","Enes_Kanter","Trey_Burke","Tim_Hardaway","Wesley_Matthews","Isaiah_Hicks","Frank_Ntilikina","Ron_Baker","Courtney_Lee","Billy_Garrett"];
+               player[20] = ["Steven_Adams","Paul_George","Jerami_Grant","Alex_Abrines","Terrance_Ferguson","Dennis_Schroder","Patrick_Patterson","Nerlens_Noel","Russell_Westbrook","Hamidou_Diallo","Raymond_Felton","Abdel_Nader","Deonte_Burton","Timothe_Luwawu-Cabarrot","Markieff_Morris"];
+               player[21] = ["Jonathon_Simmons","Evan_Fournier","Aaron_Gordon","Terrence_Ross","Nikola_Vučević","Wesley_Iwundu","Mohamed_Bamba","Jonathan_Isaac","Jerian_Grant","Isaiah_Briscoe","D.J._Augustin","Jarell_Martin","Khem_Birch","Michael_Carter-Williams","Amile_Jefferson","Melvin_Frazier","Troy_Caupain"];
+               player[22] = ["J.J._Redick","T.J._McConnell","Joel_Embiid","Jimmy_Butler","Tobias_Harris","Ben_Simmons","Boban_Marjanović","Jonathon_Simmons","Furkan_Korkmaz","Mike_Scott","Mike_Muscala","Landry_Shamet","James_Ennis","Jonah_Bolden","Amir_Johnson","Corey_Brewer","Wilson_Chandler","Shake_Milton","Zhaire_Smith","Dario_Šarić","Haywood_Highsmith","Markelle_Fultz","Robert_Covington","Greg_Monroe","Demetrius_Jackson","Justin_Patton"];
+               player[23] = ["Mikal_Bridges","Josh_Jackson","Deandre_Ayton","Devin_Booker","Richaun_Holmes","T.J._Warren","De'Anthony_Melton","Dragan_Bender","Troy_Daniels","Kelly_Oubre","Jawun_Evans","Trevor_Ariza","Elie_Okobo","Jamal_Crawford","Ryan_Anderson","Tyson_Chandler","Isaiah_Canaan","Tyler_Johnson","Ray_Spalding","Quincy_Acy","Emanuel_Terry","Jimmer_Fredette"];
+               player[24] = ["Jake_Layman","CJ_McCollum","Jusuf_Nurkić","Meyers_Leonard","Seth_Curry","Damian_Lillard","Rodney_Hood","Enes_Kanter","Al-Farouq_Aminu","Maurice_Harkless","Evan_Turner","Nik_Stauskas","Gary_Trent","Zach_Collins","Caleb_Swanigan","Anfernee_Simons","Skal_Labissiere","Wade_Baldwin"];
+               player[25] = ["Willie_Cauley-Stein","Marvin_Bagley","Iman_Shumpert","Yogi_Ferrell","Kosta_Koufos","Buddy_Hield","Troy_Williams","De'Aaron_Fox","Bogdan_Bogdanović","Nemanja_Bjelica","Justin_Jackson","Frank_Mason","Harry_Giles","Skal_Labissiere","Ben_McLemore","Harrison_Barnes","Corey_Brewer","Alec_Burks","Caleb_Swanigan"];
+               player[26] = ["LaMarcus_Aldridge","Patty_Mills","Rudy_Gay","Bryn_Forbes","Derrick_White","DeMar_DeRozan","Marco_Belinelli","Jakob_Poeltl","Dāvis_Bertāns","Drew_Eubanks","Dante_Cunningham","Pau_Gasol","Chimezie_Metu","Quincy_Pondexter","Lonnie_Walker","Donatas_Motiejūnas"];
+               player[27] = ["Chris_Boucher","OG_Anunoby","Malcolm_Miller","Jordan_Loyd","Jodie_Meeks","Norman_Powell","Fred_VanVleet","Marc_Gasol","Pascal_Siakam","Danny_Green","Kawhi_Leonard","Delon_Wright","Greg_Monroe","Serge_Ibaka","C.J._Miles","Patrick_McCaw","Kyle_Lowry","Jeremy_Lin","Malachi_Richardson","Jonas_Valančiūnas","Lorenzo_Brown","Eric_Moreland"];
+               player[28] = ["Donovan_Mitchell","Joe_Ingles","Royce_O'Neale","Jae_Crowder","Rudy_Gobert","Georges_Niang","Grayson_Allen","Ricky_Rubio","Derrick_Favors","Kyle_Korver","Raul_Neto","Thabo_Sefolosha","Ekpe_Udoh","Tyler_Cavanaugh","Dante_Exum","Alec_Burks","Tony_Bradley","Naz_Mitrou-Long"];
+               player[29] = ["Jabari_Parker","Chasson_Randle","Trevor_Ariza","Jeff_Green","Bobby_Portis","Tomáš_Satoranský","Bradley_Beal","Thomas_Bryant","Troy_Brown","Ian_Mahinmi","Jordan_McRae","Sam_Dekker","Otto_Porter","John_Wall","Jason_Smith","Austin_Rivers","Kelly_Oubre","Markieff_Morris","Dwight_Howard","Devin_Robinson","Wesley_Johnson","John_Jenkins","Gary_Payton"];
+
+               function changeteam(index){
+                    var Sinner="";
+                    for(var i=0;i<player[index].length;i++){
+                         Sinner=Sinner+'<option value='+player[index][i]+'>'+player[index][i]+'</option>';
+                    }
+                    var playerelect=document.getElementById("player-list");
+                    playerelect.innerHTML=Sinner;
+               }
+               changeteam(document.getElementById("team-list").selectedIndex);
+
+          </script>
+
+          <script>
+
+               var svg = d3.select(document.getElementById('chart'))
+                         .append("svg")
+               
+               
+               
+               function updatePlayer(selectedPlayer) {
+               d3.json("Full_assist_18.json", function(data) {
+               d3.selectAll("svg > *").remove();
+                    var selectedfiltedData = data.filter(function(d){return d.player==selectedPlayer })
+               
+
+               
+                         // Give these new data to update
+               svg
+                    .chart("BasketballShotChart", {
+                    width: 600, 
+                    title: selectedPlayer+' 2018-19',
+                    hexagonFillValue: function(d) {  return d.z; }, 
+                    // reverse the heat range to map our z values to other colors
+                    heatScale: d3.scale.quantile()
+                          .domain([ 1])
+                          .range([ '#6689BB']),
+                    hexagonBin: function (point, bin) {
+                         var currentZ = bin.z || 0;
+                         var totalAttempts = bin.attempts || 0;
+                         var totalZ = currentZ * totalAttempts;
+               
+                         var attempts = point.attempts || 1;
+                         bin.attempts = totalAttempts + attempts;
+                         bin.z = (totalZ + (point.z * attempts))/bin.attempts;
+                    },
+                    // update radius threshold to at least 4 shots to clean up the chart
+                    hexagonRadiusThreshold:1,
+                    })
+                    .draw(selectedfiltedData)
+               
+               
+               
+               
+               
+               
+               })
+               
+               
+               }
+               
+               d3.select("#player-list").on("change", function(d) {
+               var selectedPlayerOption = d3.select(this).property("value")
+               updatePlayer(selectedPlayerOption)
+               })
+               
+               
+               updatePlayer("John_Collins")
+          </script>
+
+     </body>
+</html>
